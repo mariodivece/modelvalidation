@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unosquare.ModelValidation.Playground", "Unosquare.ModelValidation.Playground\Unosquare.ModelValidation.Playground.csproj", "{B5E668B3-DF6C-4F4D-B5A0-1B265081A04E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unosquare.ModelValidation.Playground", "Unosquare.ModelValidation.Playground\Unosquare.ModelValidation.Playground.csproj", "{B5E668B3-DF6C-4F4D-B5A0-1B265081A04E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unosquare.ModelValidation", "Unosquare.ModelValidation\Unosquare.ModelValidation.csproj", "{658565AF-DF24-49B5-BE39-F0BF83A1F9C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unosquare.ModelValidation", "Unosquare.ModelValidation\Unosquare.ModelValidation.csproj", "{658565AF-DF24-49B5-BE39-F0BF83A1F9C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{526F055E-BA43-4CB5-A022-B712B48374CC}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

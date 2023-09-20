@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Core;
 
 namespace Unosquare.ModelValidation.Playground;
 
@@ -10,37 +10,42 @@ internal class Program
 {
     static async Task Main(string[] args)
     {
-        
+        Logger? logger = null;
+
         var builder = Host
             .CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((context, builder) =>
-            {
-                builder
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .AddUserSecrets<Program>(true);
-            })
             .ConfigureServices((services) =>
             {
                 services
                     .AddLocalization(options => options.ResourcesPath = "Resources")
-                    .AddTransient<Sample>();
+                    .AddSingleton<Sample>();
             })
             .ConfigureLogging((context, builder) =>
             {
-                var consoleLogger = new LoggerConfiguration()
+                logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(context.Configuration)
                     .CreateLogger();
 
                 builder
                     .ClearProviders()
-                    .AddSerilog(consoleLogger, true);
+                    .AddSerilog(logger, false);
             });
 
         var host = builder.Build();
 
-        var worker = host.Services.GetRequiredService<Sample>();
-        await worker.RunAsync().ConfigureAwait(false);
+        try
+        {
+            var worker = host.Services.GetRequiredService<Sample>();
+            await worker.RunAsync().ConfigureAwait(false);
+        }
+        finally
+        {
+            // We need to dispose of the logger;
+            // since we are not calling the host.RunAsync() method,
+            // and there is a file buffer that has not been written to,
+            // we need to manually call Dispose on the logger.
+            logger?.Dispose();
+        }
 
         Console.WriteLine("Host finshed running. Press any key to exit.");
         Console.ReadKey(intercept: true);
