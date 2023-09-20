@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unosquare.ModelValidation.Playground", "Unosquare.ModelValidation.Playground\Unosquare.ModelValidation.Playground.csproj", "{B5E668B3-DF6C-4F4D-B5A0-1B265081A04E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unosquare.ModelValidation", "Unosquare.ModelValidation\Unosquare.ModelValidation.csproj", "{658565AF-DF24-49B5-BE39-F0BF83A1F9C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B5E668B3-DF6C-4F4D-B5A0-1B265081A04E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5E668B3-DF6C-4F4D-B5A0-1B265081A04E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5E668B3-DF6C-4F4D-B5A0-1B265081A04E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5E668B3-DF6C-4F4D-B5A0-1B265081A04E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{658565AF-DF24-49B5-BE39-F0BF83A1F9C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{658565AF-DF24-49B5-BE39-F0BF83A1F9C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{658565AF-DF24-49B5-BE39-F0BF83A1F9C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{658565AF-DF24-49B5-BE39-F0BF83A1F9C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F1E51CC8-48A8-4136-A704-5488B31D603F}
+	EndGlobalSection
+EndGlobal
