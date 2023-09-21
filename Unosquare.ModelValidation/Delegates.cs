@@ -1,4 +1,6 @@
-﻿namespace Unosquare.ModelValidation;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Unosquare.ModelValidation;
 
 /// <summary>
 /// A delegate that represents a filtering action that reads the original value
@@ -15,7 +17,7 @@ public delegate ValueTask<TMember> PreValidationFormatAsync<TMember, TModel>(Fie
 public delegate TMember PreValidationFormat<TMember, TModel>(FieldValidatorContext<TModel, TMember> context, TMember originalValue);
 
 
-public delegate ValueTask<FieldValidationResult> ValidationActionAsync<TModel, TMember>(FieldValidatorContext<TModel, TMember> context, TMember currentValue);
+public delegate ValueTask<ValidationResult> ValidationActionAsync<TModel, TMember>(FieldValidatorContext<TModel, TMember> context, TMember currentValue);
 
 public delegate ValueTask PostValidationActionAsync<TModel, TMember>(FieldValidatorContext<TModel, TMember> context, TMember validatedValue);
 

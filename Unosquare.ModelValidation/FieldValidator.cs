@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Localization;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace Unosquare.ModelValidation;
@@ -63,15 +64,15 @@ public class FieldValidator<TModel, TMember>
         return this;
     }
 
-    public FieldValidationResult Validate(object instance, IStringLocalizer? localizer = null) =>
+    public ValidationResult? Validate(object? instance, IStringLocalizer? localizer = null) =>
         ValidateAsync(instance, localizer).AsTask().GetAwaiter().GetResult();
 
-    public async ValueTask<FieldValidationResult> ValidateAsync(object instance, IStringLocalizer? localizer = null)
+    public async ValueTask<ValidationResult?> ValidateAsync(object? instance, IStringLocalizer? localizer = null)
     {
         if (instance is not TModel model)
             throw new ArgumentException($"Instance must not be null and of type '{typeof(TModel).FullName}'.", nameof(instance));
 
-        var result = FieldValidationResult.Success;
+        var result = ValidationResult.Success;
         var context = new FieldValidatorContext<TModel, TMember>(this, model, localizer);
 
         // obtain the base value
@@ -96,7 +97,8 @@ public class FieldValidator<TModel, TMember>
         // now, run the validation action that produces a result
         result = await _validator.Invoke(context, value).ConfigureAwait(false);
 
-        if (result.IsValid)
+        // check if result is success
+        if (result is null)
         {
             if (_postSuccess is not null)
                 await _postSuccess.Invoke(context, value).ConfigureAwait(false);

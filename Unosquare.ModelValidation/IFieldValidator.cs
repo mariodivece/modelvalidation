@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Localization;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace Unosquare.ModelValidation;
@@ -9,7 +10,7 @@ public interface IFieldValidator
 
     PropertyInfo Property { get; }
 
-    FieldValidationResult Validate(object instance, IStringLocalizer? localizer = null);
+    ValidationResult? Validate(object? instance, IStringLocalizer? localizer = null);
 
-    ValueTask<FieldValidationResult> ValidateAsync(object instance, IStringLocalizer? localizer = null);
+    ValueTask<ValidationResult?> ValidateAsync(object? instance, IStringLocalizer? localizer = null);
 }

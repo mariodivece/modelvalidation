@@ -19,30 +19,22 @@ internal class Sample
 
     public async Task RunAsync()
     {
-        var validator = new ModelValidator<Car>();
+        var carValidator = new ModelValidator<Car>()
+            .AddRequired(r => r.Name)
+            .AddRequired(r => r.Email)
+            .AddEmail(r => r.Email)
+            .AddFromAttributes()
+            .AddFromAttributes(r => r.Id);
 
-        validator.Add(r => r.Name)
-            .WithInputFilter((ctx, originalValue) =>
-                originalValue.Trim().ToUpperInvariant())
-            .WithValidation(async (ctx, currentValue) =>
-                currentValue.StartsWith("X")
-                    ? await ctx.Pass()
-                    : await ctx.Fail(ctx.Localizer!["ErrorMessage"]))
-            .WithPostSuccess((ctx, validatedValue) =>
-            {
-                ctx.SetValue(validatedValue);
-            });
+        var car = new Car() { 
+            Name = string.Empty,
+            Email ="xyz@nopet@invlid...com" };
 
-        var car = new Car() { Name = "   Sample Car   " };
+        var validation = await carValidator.ValidateAsync(car, Text);
+        Logger.LogInformation($"Is Valid: {validation.IsValid}");
 
-        Logger.LogInformation($"Initial Car Name: '{car.Name}'");
-
-        var v = await validator.ValidateAsync(car, Text);
-        Logger.LogInformation($"Is Valid: {v.IsValid}");
-        foreach (var fieldName in v.FieldNames)
-        {
-            Logger.LogInformation($"{fieldName}: {v[fieldName]}");
-        }
+        foreach (var fieldName in validation.FieldNames)
+            Logger.LogInformation($"{fieldName}: {validation[fieldName]}");
 
         Logger.LogInformation($"Validated Car Name: '{car.Name}'");
     }

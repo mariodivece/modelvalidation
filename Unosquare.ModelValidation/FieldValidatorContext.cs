@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Localization;
+using System.ComponentModel.DataAnnotations;
 
 namespace Unosquare.ModelValidation;
 
@@ -58,22 +59,24 @@ public sealed class FieldValidatorContext<TModel, TMember>
         }
     }
 
-    public ValueTask<FieldValidationResult> Fail(int errorCode = -1, params string[] messages) =>
-        ValueTask.FromResult(new FieldValidationResult()
-        {
-            IsValid = false,
-            ResultCode = errorCode,
-            ErrorMessages = messages
-        });
+    public string Localize(string key, string defaultText, params object[] arguments)
+    {
+        if (Localizer is null)
+            return string.Format(defaultText, arguments);
 
-    public ValueTask<FieldValidationResult> Fail(string message, int errorCode = -1) =>
-        ValueTask.FromResult(new FieldValidationResult()
-        {
-            IsValid = false,
-            ResultCode = errorCode,
-            ErrorMessages = new[] { message }
-        });
+        var resource = Localizer[key];
 
-    public ValueTask<FieldValidationResult> Pass() =>
-        ValueTask.FromResult(FieldValidationResult.Success);
+        return resource is null || resource.ResourceNotFound
+            ? defaultText
+            : Localizer.GetString(key, arguments);
+    }
+
+    public ValueTask<ValidationResult> Fail(int errorCode = -1, params string[] messages) =>
+        ValueTask.FromResult(new ValidationResult(string.Join(Environment.NewLine, messages)));
+
+    public ValueTask<ValidationResult> Fail(string message, int errorCode = -1) =>
+        ValueTask.FromResult(new ValidationResult(message));
+
+    public ValueTask<ValidationResult?> Pass() =>
+        ValueTask.FromResult(ValidationResult.Success);
 }

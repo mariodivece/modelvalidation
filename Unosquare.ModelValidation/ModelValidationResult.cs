@@ -1,22 +1,24 @@
-﻿namespace Unosquare.ModelValidation;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Unosquare.ModelValidation;
 
 public sealed record ModelValidationResult
 {
-    private static readonly Dictionary<string, FieldValidationResult> EmptyResults = new(0);
+    private static readonly Dictionary<string, ValidationResult> EmptyResults = new(0);
 
-    private readonly IDictionary<string, FieldValidationResult> _validationResults;
+    private readonly IDictionary<string, ValidationResult> _validationResults;
     private readonly Lazy<string[]> _fieldNames;
   
-    internal ModelValidationResult(IDictionary<string, FieldValidationResult>? validationResults)
+    internal ModelValidationResult(IDictionary<string, ValidationResult>? validationResults)
     {
         _validationResults = validationResults ?? EmptyResults;
         _fieldNames = new(() => _validationResults.Keys.ToArray(), false);
-        ErrorCount = _validationResults.Count(kvp => kvp.Value.IsValid == false);
+        ErrorCount = _validationResults.Count(kvp => kvp.Value is not null);
     }
 
     public static ModelValidationResult Empty { get; } = new(EmptyResults);
 
-    public FieldValidationResult this[string fieldName] => ForField(fieldName);
+    public ValidationResult? this[string fieldName] => ForField(fieldName);
 
     public IReadOnlyList<string> FieldNames => _fieldNames.Value;
 
@@ -24,8 +26,8 @@ public sealed record ModelValidationResult
 
     public bool IsValid => ErrorCount <= 0;
 
-    public FieldValidationResult ForField(string fieldName) => _validationResults.TryGetValue(fieldName, out var result)
+    public ValidationResult? ForField(string fieldName) => _validationResults.TryGetValue(fieldName, out var result)
         ? result
-        : FieldValidationResult.Success;
+        : ValidationResult.Success;
 
 }
