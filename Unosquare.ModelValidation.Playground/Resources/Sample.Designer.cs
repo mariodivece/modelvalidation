@@ -22,14 +22,14 @@ namespace Unosquare.ModelValidation.Playground.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Worker {
+    internal class Sample {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Worker() {
+        internal Sample() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Unosquare.ModelValidation.Playground.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Unosquare.ModelValidation.Playground.Resources.Worker", typeof(Worker).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Unosquare.ModelValidation.Playground.Resources.Sample", typeof(Sample).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,29 @@ namespace Unosquare.ModelValidation.Playground.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Localized error message!.
+        ///   Looks up a localized string similar to That&apos;s a wierd email address format. Try again!.
         /// </summary>
-        internal static string ErrorMessage {
+        internal static string Validation_Email_BadFormat {
             get {
-                return ResourceManager.GetString("ErrorMessage", resourceCulture);
+                return ResourceManager.GetString("Validation.Email.BadFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oops, looks like accepted range for {0} is between {1} and {2}.
+        /// </summary>
+        internal static string Validation_Number_Range {
+            get {
+                return ResourceManager.GetString("Validation.Number.Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The field cannot be null or empty!.
+        /// </summary>
+        internal static string Validation_Required_NotNull {
+            get {
+                return ResourceManager.GetString("Validation.Required.NotNull", resourceCulture);
             }
         }
     }

@@ -6,6 +6,8 @@ namespace Unosquare.ModelValidation;
 
 public interface IFieldValidator
 {
+    Type ModelType { get; }
+
     string FieldName { get; }
 
     PropertyInfo Property { get; }

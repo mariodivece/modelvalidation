@@ -24,17 +24,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="Resources\Worker.Designer.cs">
+		<Compile Update="Resources\Sample.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
-			<DependentUpon>Worker.resx</DependentUpon>
+			<DependentUpon>Sample.resx</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Update="Resources\Worker.resx">
+		<EmbeddedResource Update="Resources\Sample.resx">
 			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>Worker.Designer.cs</LastGenOutput>
+			<LastGenOutput>Sample.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 	</ItemGroup>
 

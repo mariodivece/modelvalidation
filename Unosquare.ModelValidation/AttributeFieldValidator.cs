@@ -7,12 +7,14 @@ namespace Unosquare.ModelValidation;
 
 public class AttributeFieldValidator : IFieldValidator
 {
-
     public AttributeFieldValidator(PropertyInfo propertyInfo, ValidationAttribute attributeInstance)
     {
         Property = propertyInfo;
         Attribute = attributeInstance;
+        ModelType = propertyInfo.DeclaringType ?? typeof(object);
     }
+
+    public Type ModelType { get; }
 
     public ValidationAttribute Attribute { get; }
 
@@ -23,15 +25,24 @@ public class AttributeFieldValidator : IFieldValidator
     public ValidationResult? Validate(object? instance, IStringLocalizer? localizer = null)
     {
         var propertyValue = Property.GetValue(instance);
-        var errorMessage = Attribute.FormatErrorMessage(FieldName);
+        var errorMessage = string.Empty;
 
-        if (localizer is not null)
+        if (!string.IsNullOrWhiteSpace(Attribute.ErrorMessageResourceName) &&
+            Attribute.ErrorMessageResourceType is null &&
+            localizer is not null)
         {
-            var resource = localizer.GetString(nameof(Attribute.ErrorMessageResourceName));
+            var resource = localizer.GetString(Attribute.ErrorMessageResourceName);
             if (resource is not null && !resource.ResourceNotFound)
-                errorMessage = resource.Value;
+            {
+                Attribute.ErrorMessageResourceType = null;
+                Attribute.ErrorMessageResourceName = null;
+                Attribute.ErrorMessage = resource.Value;
+            }
         }
 
+        if (string.IsNullOrWhiteSpace(errorMessage))
+            errorMessage = Attribute.FormatErrorMessage(FieldName);
+        
         return Attribute.IsValid(propertyValue)
             ? ValidationResult.Success
             : new ValidationResult(errorMessage);

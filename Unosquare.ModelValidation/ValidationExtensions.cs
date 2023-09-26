@@ -11,14 +11,15 @@ public static class ValidationExtensions
     public static ModelValidator<TModel> AddEmail<TModel>(
         this ModelValidator<TModel> validator, Expression<Func<TModel, string?>> memberLambda)
     {
-        _ = validator.AddCustom(memberLambda)
-            .WithInputFilter((context, originalValue) =>
-            {
-                if (originalValue is null)
-                    return originalValue;
+        _ = validator.AddCustom(memberLambda, config =>
+        {
+            config.WithInputFilter((context, originalValue) =>
+             {
+                 if (originalValue is null)
+                     return originalValue;
 
-                return originalValue.Trim().ToLowerInvariant();
-            })
+                 return originalValue.Trim().ToLowerInvariant();
+             })
             .WithValidation((context, filteredValue) =>
             {
                 if (filteredValue is null)
@@ -33,6 +34,7 @@ public static class ValidationExtensions
             {
                 _ = context.TrySetValue(filteredValue);
             });
+        });
 
         return validator;
     }
@@ -40,15 +42,15 @@ public static class ValidationExtensions
     public static ModelValidator<TModel> AddRequired<TModel, TMember>(
         this ModelValidator<TModel> validator, Expression<Func<TModel, TMember?>> memberLambda)
     {
-        _ = validator.AddCustom(memberLambda)
-            .WithValidation((context, filteredValue) =>
-            {
-                return DataValidatorRequired.IsValid(filteredValue) ? context.Pass() : context.Fail(
-                    context.Localize("Validation.Required.NotNull", "Field is required."));
-            });
+        _ = validator.AddCustom(memberLambda, config =>
+        {
+            config.WithValidation((context, filteredValue) =>
+             {
+                 return DataValidatorRequired.IsValid(filteredValue) ? context.Pass() : context.Fail(
+                     context.Localize("Validation.Required.NotNull", "Field is required."));
+             });
+        });
 
         return validator;
     }
-
-
 }

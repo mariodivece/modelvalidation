@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 
 namespace Unosquare.ModelValidation.Playground;
 
@@ -20,21 +21,31 @@ internal class Sample
     public async Task RunAsync()
     {
         var carValidator = new ModelValidator<Car>()
+            .AddCustom(nameof(Car.Id), config =>
+            {
+                config
+                    .WithInputFilter((context, value) => 6)
+                    .WithPostSuccess((context, value) => context.SetValue(value));
+            })
             .AddRequired(r => r.Name)
             .AddRequired(r => r.Email)
             .AddEmail(r => r.Email)
-            .AddFromAttributes()
-            .AddFromAttributes(r => r.Id);
+            .AddAttributes()
+            .AddAttributes(r => r.Id)
+            .AddAttribute(r => r.Id, () => new RangeAttribute(2, 20))
+;
 
-        var car = new Car() { 
+        var car = new Car()
+        {
             Name = string.Empty,
-            Email ="xyz@nopet@invlid...com" };
+            Email = "xyz@nopet@invlid...com"
+        };
 
         var validation = await carValidator.ValidateAsync(car, Text);
         Logger.LogInformation($"Is Valid: {validation.IsValid}");
 
         foreach (var fieldName in validation.FieldNames)
-            Logger.LogInformation($"{fieldName}: {validation[fieldName]}");
+            Logger.LogInformation($"{fieldName}: {string.Join("; ", validation[fieldName].Select(c => c.ErrorMessage))}");
 
         Logger.LogInformation($"Validated Car Name: '{car.Name}'");
     }
