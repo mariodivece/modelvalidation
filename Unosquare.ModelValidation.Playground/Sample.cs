@@ -24,15 +24,15 @@ internal class Sample
             .AddCustom(nameof(Car.Id), config =>
             {
                 config
-                    .WithInputFilter((context, value) => 6)
-                    .WithPostSuccess((context, value) => context.SetValue(value));
+                    .WithPreValidation((context, value) => 21)
+                    .WithPostValidation((context, value) => context.SetValue(value));
             })
             .AddRequired(r => r.Name)
             .AddRequired(r => r.Email)
             .AddEmail(r => r.Email)
             .AddAttributes()
             .AddAttributes(r => r.Id)
-            .AddAttribute(r => r.Id, () => new RangeAttribute(2, 20))
+            .AddAttribute(r => r.Id, () => new RangeAttribute(2, 20) { ErrorMessageResourceName = "Validation.Number.Range" })
 ;
 
         var car = new Car()
@@ -44,7 +44,7 @@ internal class Sample
         var validation = await carValidator.ValidateAsync(car, Text);
         Logger.LogInformation($"Is Valid: {validation.IsValid}");
 
-        foreach (var fieldName in validation.FieldNames)
+        foreach (var fieldName in validation.MemberNames)
             Logger.LogInformation($"{fieldName}: {string.Join("; ", validation[fieldName].Select(c => c.ErrorMessage))}");
 
         Logger.LogInformation($"Validated Car Name: '{car.Name}'");
