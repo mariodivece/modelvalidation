@@ -14,13 +14,10 @@ public record ModelValidationResult
         new Dictionary<string, IReadOnlyList<ValidationResult>>(0);
 
     private readonly IDictionary<string, IReadOnlyList<ValidationResult>> _validationResults;
-    private readonly Lazy<string[]> _fieldNames;
   
     internal ModelValidationResult(IDictionary<string, IReadOnlyList<ValidationResult>>? validationResults)
     {
         _validationResults = validationResults ?? EmptyResults;
-        _fieldNames = new(() => _validationResults.Keys.ToArray(), false);
-        ErrorCount = _validationResults.Sum(c => c.Value.Count);
     }
 
     /// <summary>
@@ -38,12 +35,12 @@ public record ModelValidationResult
     /// <summary>
     /// Gets a set of member names that contain errors.
     /// </summary>
-    public IReadOnlyList<string> MemberNames => _fieldNames.Value;
+    public IReadOnlyList<string> MemberNames => _validationResults.Keys.ToArray();
 
     /// <summary>
     /// Gets a value indicating the number of errors that were found.
     /// </summary>
-    public int ErrorCount { get; }
+    public int ErrorCount => _validationResults.Sum(c => c.Value.Count);
 
     /// <summary>
     /// Gets a value indicating whether no errors are present in the model validation.
@@ -98,6 +95,22 @@ public record ModelValidationResult
             return this;
 
         return Add(memberName, new ValidationResult(errorMessage));
+    }
+
+    /// <summary>
+    /// Manually removes all validation errors from a member.
+    /// </summary>
+    /// <param name="memberName">The member name.</param>
+    public ModelValidationResult Remove(string memberName)
+    {
+        if (memberName is null)
+            return this;
+
+        if (!_validationResults.TryGetValue(memberName, out var result))
+            return this;
+
+        _validationResults.Remove(memberName);
+        return this;
     }
 
     /// <summary>
@@ -178,6 +191,22 @@ public record ModelValidationResult<TModel>
 
         Add(property.Name, new ValidationResult(errorMessage));
 
+        return this;
+    }
+
+    /// <summary>
+    /// Manually removes all validation errors from a member.
+    /// </summary>
+    /// <param name="expression">The member expression.</param>
+    public ModelValidationResult<TModel> Remove<TMember>(Expression<Func<TModel, TMember>> expression)
+    {
+        if (expression is null)
+            return this;
+
+        if (!TryGetProperty(expression, out var property))
+            return this;
+
+        _ = Remove(property.Name);
         return this;
     }
 

@@ -20,7 +20,7 @@
 
 	<PropertyGroup>
 		<PackageId>Unosquare.ModelValidation</PackageId>
-		<Version>1.0.0-alpha.2</Version>
+		<Version>1.0.0-alpha.3</Version>
 		<Authors>mariodivece, unosquare</Authors>
 		<Company>Unosquare</Company>
 		<Product>Unosquare Model Validation</Product>
