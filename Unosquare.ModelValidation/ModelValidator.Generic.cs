@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Localization;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -145,4 +146,11 @@ public class ModelValidator<TModel>
         };
     }
 
+    /// <inheritdoc />
+    public new ModelValidationResult<TModel> Validate(object modelInstance, IStringLocalizer? localizer = null) =>
+        base.Validate(modelInstance, localizer).ToTyped<TModel>();
+
+    /// <inheritdoc />
+    public new async ValueTask<ModelValidationResult<TModel>> ValidateAsync(object modelInstance, IStringLocalizer? localizer = null) =>
+        (await base.ValidateAsync(modelInstance, localizer).ConfigureAwait(false)).ToTyped<TModel>();
 }

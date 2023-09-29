@@ -42,6 +42,8 @@ internal class Sample
         };
 
         var validation = await carValidator.ValidateAsync(car, Text);
+
+        validation.Add("SomeField", "This is some manual error message");
         Logger.LogInformation($"Is Valid: {validation.IsValid}");
 
         foreach (var fieldName in validation.MemberNames)
