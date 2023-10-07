@@ -1,4 +1,4 @@
-# A Flexible Model Validation
+# A Flexible Model Validation Library
 
 An easy-to-use formatter, validator and postprocessor for user input management.
 
