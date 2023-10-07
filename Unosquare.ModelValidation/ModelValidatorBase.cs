@@ -41,15 +41,30 @@ public abstract class ModelValidatorBase<T>
     public IReadOnlyDictionary<string, IList<IMemberValidator>> Members => _fields;
 
     /// <summary>
+    /// Removes validators from the specified member.
+    /// </summary>
+    /// <param name="memberName">The member name.</param>
+    /// <returns>This instance for fluent API support.</returns>
+    public T Remove(string memberName)
+    {
+        if (string.IsNullOrWhiteSpace(memberName))
+            return (this as T)!;
+
+        _fields.Remove(memberName);
+
+        return (this as T)!;
+    }
+
+    /// <summary>
     /// Adds a validator to the specified field name.
     /// </summary>
-    /// <param name="fieldName">The unique name of the field.</param>
+    /// <param name="memberName">The unique name of the member.</param>
     /// <param name="validator">The validator object to associate the field name with.</param>
     /// <returns>This instance for fluent API support.</returns>
-    public T Add(string fieldName, IMemberValidator validator)
+    public T Add(string memberName, IMemberValidator validator)
     {
-        if (!_fields.TryGetValue(fieldName, out var validators))
-            validators = _fields[fieldName] = new List<IMemberValidator>();
+        if (!_fields.TryGetValue(memberName, out var validators))
+            validators = _fields[memberName] = new List<IMemberValidator>();
 
         if (validators is List<IMemberValidator> validatorList)
             validatorList.Add(validator);

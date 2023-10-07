@@ -21,10 +21,16 @@ internal class Sample
     public async Task RunAsync()
     {
         var carValidator = new ModelValidator<Car>()
-            .AddCustom(nameof(Car.Id), config =>
+            .AddCustom(r => r.Id, config =>
             {
                 config
                     .WithPreValidation((context, value) => 21)
+                    .WithValidation((context, value) =>
+                    {
+                        return value == 21
+                            ? context.Pass()
+                            : context.Fail();
+                    })
                     .WithPostValidation((context, value) => context.SetValue(value));
             })
             .AddRequired(r => r.Name)
@@ -34,7 +40,6 @@ internal class Sample
             .AddAttributes(r => r.Id)
             .AddAttribute(r => r.Id, () => new RangeAttribute(2, 20) { ErrorMessageResourceName = "Validation.Number.Range" })
 ;
-
         var car = new Car()
         {
             Name = string.Empty,
@@ -42,7 +47,7 @@ internal class Sample
         };
 
         var validation = await carValidator.ValidateAsync(car, Text);
-
+        
         validation.Add("SomeField", "This is some manual error message");
         Logger.LogInformation($"Is Valid: {validation.IsValid}");
 

@@ -25,6 +25,19 @@ public class ModelValidator<TModel>
     }
 
     /// <summary>
+    /// Removes validators from the specified member.
+    /// </summary>
+    /// <param name="memberLambda">The member name expression.</param>
+    /// <returns>This instance for fluent API support.</returns>
+    public ModelValidator<TModel> Remove<TMember>(Expression<Func<TModel, TMember>> memberLambda)
+    {
+        if (TryGetProperty(memberLambda, out var propertyInfo))
+            Remove(propertyInfo.Name);
+
+        return this;
+    }
+
+    /// <summary>
     /// Adds <see cref="MemberAttributeValidator"/> instances
     /// for a single property by providing the name of the property.
     /// </summary>
